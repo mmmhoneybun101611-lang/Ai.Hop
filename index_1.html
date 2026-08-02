@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple AI</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1e1e2f;
+    font-family: system-ui, sans-serif;
+    color: #f0f0f0;
+    padding: 16px;
+  }
+  #chat {
+    width: 100%;
+    max-width: 500px;
+    height: 60vh;
+    background: #2a2a3d;
+    border-radius: 12px;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .msg {
+    padding: 10px 14px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+  }
+  .user {
+    align-self: flex-end;
+    background: #4f6df5;
+    color: white;
+  }
+  .ai {
+    align-self: flex-start;
+    background: #3a3a52;
+    color: #f0f0f0;
+  }
+  form {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+  }
+  button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    background: #4f6df5;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #3d59d1;
+  }
+</style>
+</head>
+<body>
+
+<div id="chat"></div>
+
+<form id="chatForm">
+  <input id="userInput" type="text" placeholder="Type a message..." autocomplete="off">
+  <button type="submit">Send</button>
+</form>
+
+<script>
+  const responses = {
+    "hi": "hi back"
+  };
+
+  function getResponse(message) {
+    const key = message.trim().toLowerCase();
+    return responses[key] || "I don't know how to respond to that yet";
+  }
+
+  const chat = document.getElementById("chat");
+  const form = document.getElementById("chatForm");
+  const input = document.getElementById("userInput");
+
+  function addMessage(text, sender) {
+    const div = document.createElement("div");
+    div.className = "msg " + sender;
+    div.textContent = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const message = input.value;
+    if (!message.trim()) return;
+    addMessage(message, "user");
+    const reply = getResponse(message);
+    setTimeout(function () {
+      addMessage(reply, "ai");
+    }, 200);
+    input.value = "";
+  });
+</script>
+
+</body>
+</html>
